@@ -1,4 +1,4 @@
-module github.com/jasonkolodziej/octo-broccoli
+module github.com/jasonkolodziej/protoc-gen-go-redact
 
 go 1.17
 

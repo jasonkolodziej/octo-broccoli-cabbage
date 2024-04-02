@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/jasonkolodziej/octo-broccoli/gateway"
-	"github.com/jasonkolodziej/octo-broccoli/insecure"
-	assetv1 "github.com/jasonkolodziej/octo-broccoli/proto_generated/example/asset/v1"
+	"github.com/jasonkolodziej/protoc-gen-go-redact/gateway"
+	"github.com/jasonkolodziej/protoc-gen-go-redact/insecure"
+	assetv1 "github.com/jasonkolodziej/protoc-gen-go-redact/proto_generated/example/asset/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
