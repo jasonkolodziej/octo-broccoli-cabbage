@@ -24,8 +24,8 @@ COPY ../../cmd ./cmd
 RUN go build -o bin/protoc-gen-redact ./cmd/protoc-gen-go-redact
 
 FROM golang:1.21-bullseye AS plugin-builder
-COPY --from=plugin-builder /app/cmd/protoc-gen-go-redact/internal/template.tmpl /go/bin/
-COPY --from=plugin-builder /app/bin /go/bin/
+COPY --from=builder-local /app/cmd/protoc-gen-go-redact/internal/template.tmpl /go/bin/
+COPY --from=builder-local /app/bin /go/bin/
 # RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
 #     go install -ldflags "-s -w" -trimpath github.com/jasonkolodziej/protoc-gen-go-redact@v1.1.0
 
