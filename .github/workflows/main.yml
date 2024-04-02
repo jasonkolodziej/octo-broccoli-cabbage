@@ -85,7 +85,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        push: false
+        push: true
         file: plugins/go-redact/Dockerfile
       #? Refer to: https://buf.build/docs/bsr/remote-plugins/custom-plugins#build-a-docker-image
         platforms:
@@ -107,13 +107,13 @@ jobs:
     #     input: --image buf.build/jasonkolodziej/redact:v0.1.1
     #     create_visibility: private
     #     draft: ${{ github.ref_name != 'main'}}
-    # - name: Setup buf.build action for publishing protoc-plugin image
-    #   uses: bufbuild/buf-setup-action@v1.30.0
-    #   with:
-    #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     buf_user: ${{ secrets.BUFUSER }}
-    #     buf_api_token: ${{ secrets.BUFTOKEN }}
-    #     # Ensure that `buf` is installed
+    - name: Setup buf.build action for publishing protoc-plugin image
+      uses: bufbuild/buf-setup-action@v1.30.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        buf_user: ${{ secrets.BUFUSER }}
+        buf_api_token: ${{ secrets.BUFTOKEN }}
+        # Ensure that `buf` is installed
     - name: Validate buf is working
       run: buf --version
     
