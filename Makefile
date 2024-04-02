@@ -54,7 +54,16 @@ update:
 init:
 	buf --debug --verbose mod init
 
-clean:
+
+clean: # lint
+	GO111MODULE=on go mod tidy
+	rm -rf bin/*
+
+build: clean
+	GO111MODULE=on go build -o bin/protoc-gen-go-redact ./cmd/protoc-gen-go-redact
+	cp ./cmd/protoc-gen-go-redact/internal/template.tmpl bin/template.tmpl
+
+buf_clean:
 	buf --debug --verbose mod clear-cache
 # 1> Install buf with make install, which is necessary for us to generate the Go and OpenAPIv2 files.
 # 2> If you forked this repo, or cloned it into a different directory from the github structure,

@@ -5,6 +5,7 @@ name: buf.build/jasonkolodziej/redact
 deps:
   - buf.build/googleapis/googleapis
   - buf.build/grpc-ecosystem/grpc-gateway
+  # - buf.build/protocolbuffers/go
 build:
   #? Optional. Lists directories to ignore from .proto file discovery. Any directories added to this list are completely skipped and excluded in the module. 
   #? We don't recommend using this option, but in some situations it's unavoidable.

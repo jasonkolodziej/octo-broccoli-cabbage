@@ -25,7 +25,12 @@ func (*Module) Name() string { return "redactor" }
 func (m *Module) InitContext(c pgs.BuildContext) {
 	m.ModuleBase.InitContext(c)
 	m.ctx = pgsGo.InitContext(c.Parameters())
-	m.tmpl = template.Must(template.ParseFiles("template.tmp"))
+	tmpl, err := template.ParseFiles("template.tmpl")
+	if err != nil {
+		m.tmpl = template.Must(template.New("redactTemplate").Parse(templateConst))
+		return
+	}
+	m.tmpl = template.Must(tmpl, err)
 }
 
 // Execute satisfies the pgs.Module interface & generates the redactor file
