@@ -1,4 +1,4 @@
-package redact
+package internal
 
 import (
 	pgs "github.com/lyft/protoc-gen-star"

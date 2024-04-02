@@ -1,4 +1,4 @@
-package redact
+package internal
 
 import (
 	"strconv"
@@ -14,14 +14,14 @@ func (m *Module) importPaths(file pgs.File) (path2Alias, alias2Path map[string]s
 		"google.golang.org/grpc":        "grpc",
 		"google.golang.org/grpc/codes":  "codes",
 		"google.golang.org/grpc/status": "status",
-		"github.com/jasonkolodziej/protoc-gen-go-redact/redact": "redact",
+		"github.com/jasonkolodziej/protoc-gen-go-redact/proto/redact": "redact",
 	}
 	alias2Path = map[string]string{
 		"context": "context",
 		"grpc":    "google.golang.org/grpc",
 		"codes":   "google.golang.org/grpc/codes",
 		"status":  "google.golang.org/grpc/status",
-		"redact":  "github.com/jasonkolodziej/protoc-gen-go-redact/redact",
+		"redact":  "github.com/jasonkolodziej/protoc-gen-go-redact/proto/redact",
 	}
 
 	self := m.ctx.ImportPath(file).String()

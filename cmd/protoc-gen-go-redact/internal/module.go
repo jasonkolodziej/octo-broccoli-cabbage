@@ -1,4 +1,4 @@
-package redact
+package internal
 
 import (
 	"text/template"
@@ -9,7 +9,7 @@ import (
 
 // Redactor returns the implementation of the protoc-gen-redact plugin
 // to generate redaction file
-func redactor() pgs.Module { return &Module{ModuleBase: &pgs.ModuleBase{}} }
+func Redactor() pgs.Module { return &Module{ModuleBase: &pgs.ModuleBase{}} }
 
 // Module implements the pgs.Module interface for protoc-gen-redact plugin
 type Module struct {
