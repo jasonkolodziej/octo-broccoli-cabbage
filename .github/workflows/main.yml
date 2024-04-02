@@ -129,7 +129,7 @@ jobs:
     - name: Push buf.build image
       run: |
         ls -al
-        buf beta registry plugin push ./plugins/go-redact --visibility public --debug --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+        buf beta registry plugin push ./plugins/go-redact --visibility public --verbose --debug --image ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
         
     - name: buf.build logout
       run: buf registry logout
