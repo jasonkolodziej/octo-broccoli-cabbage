@@ -24,13 +24,15 @@ COPY ../../cmd ./cmd
 RUN go build -o bin/protoc-gen-redact ./cmd/protoc-gen-go-redact
 
 FROM golang:1.21-bullseye AS plugin-builder
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-    go install -ldflags "-s -w" -trimpath github.com/jasonkolodziej/protoc-gen-go-redact@v1.1.0
+COPY --from=plugin-builder /app/cmd/protoc-gen-go-redact/internal/template.tmpl /go/bin/
+COPY --from=plugin-builder /app/bin /go/bin/
+# RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+#     go install -ldflags "-s -w" -trimpath github.com/jasonkolodziej/protoc-gen-go-redact@v1.1.0
 
 # When building a Docker image on a host that does not match linux/amd64 (such as an M1),
 # go install will put the binary in $GOPATH/bin/$GOOS_$GOARCH/. The mv command copies
 # the binary to /go/bin so subsequent steps do not fail when copying from the builder.
-RUN mv /go/bin/linux_amd64/* /go/bin || true
+# RUN mv /go/bin/linux_amd64/* /go/bin || true
 
 FROM scratch
 COPY --from=plugin-builder --link /etc/passwd /etc/passwd
