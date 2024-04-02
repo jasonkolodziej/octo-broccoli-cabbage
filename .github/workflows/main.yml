@@ -75,8 +75,9 @@ jobs:
       uses: docker/metadata-action@v5.5.1
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        #? flavor defines a global behavior for tags:           latest=auto
+        #? flavor defines a global behavior for tags:
         flavor: |
+          latest=false
           prefix=v
         #? tags is the core input of this action as everything related to it will reflect the output metadata. 
         #? This one is in the form of a key-value pair list in CSV format to remove limitations intrinsically linked 
