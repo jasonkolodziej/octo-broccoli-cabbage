@@ -1,9 +1,9 @@
-package cmd
+package redact
 
 import (
 	"strings"
 
-	redact "github.com/jasonkolodziej/protoc-gen-go-redact/gen/redact"
+	redact "github.com/jasonkolodziej/protoc-gen-go-redact/gen/redact/v1"
 	pgs "github.com/lyft/protoc-gen-star"
 	"google.golang.org/grpc/codes"
 )

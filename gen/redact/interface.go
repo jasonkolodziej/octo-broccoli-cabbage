@@ -1,7 +1,9 @@
 // Package redact provides interfaces and methods to help implement redaction.
 package redact
 
-import "context"
+import (
+	"context"
+)
 
 // Redactor provides the method to be used to Redact
 type Redactor interface {

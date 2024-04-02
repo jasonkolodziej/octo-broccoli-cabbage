@@ -1,4 +1,4 @@
-package cmd
+package redact
 
 // ProtoFileData defines custom data type for Proto File info needed in template
 type ProtoFileData struct {

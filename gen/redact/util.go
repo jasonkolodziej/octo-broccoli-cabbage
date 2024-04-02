@@ -1,4 +1,4 @@
-package cmd
+package redact
 
 import (
 	pgs "github.com/lyft/protoc-gen-star"
