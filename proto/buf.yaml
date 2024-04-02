@@ -1,6 +1,6 @@
 # For help see: https://docs.buf.build/tour/configure-and-build#configure-buf
 version: v1
-name: buf.build/acme/paymentapis
+name: buf.build/jasonkolodziej/redact
 
 deps:
   - buf.build/googleapis/googleapis
