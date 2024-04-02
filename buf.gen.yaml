@@ -3,23 +3,23 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/jasonkolodziej/protoc-gen-go-redact/proto_generated
+    default: github.com/jasonkolodziej/protoc-gen-go-redact/gen
     #    default: ./;proto_generated
     except:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
 plugins:
   - plugin: buf.build/protocolbuffers/go
-    out: proto_generated
+    out: gen
     opt: paths=source_relative
   - plugin: buf.build/grpc/go
-    out: proto_generated
+    out: gen
     opt: paths=source_relative,require_unimplemented_servers=false
   - plugin: buf.build/grpc-ecosystem/gateway
-    out: proto_generated
+    out: gen
     opt: paths=source_relative
-  - plugin: buf.build/grpc-ecosystem/openapiv2
-    out: third_party/OpenAPI
+  # - plugin: buf.build/grpc-ecosystem/openapiv2
+  #   out: third_party/OpenAPI
 #  - remote: buf.build/library/plugins/go:v1.27.1-1
 #    out: proto_generated
 #    opt: paths=source_relative
