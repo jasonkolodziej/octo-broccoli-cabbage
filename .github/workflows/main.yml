@@ -75,9 +75,8 @@ jobs:
       uses: docker/metadata-action@v5.5.1
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-        #? flavor defines a global behavior for tags:
+        #? flavor defines a global behavior for tags:           latest=auto
         flavor: |
-          latest=auto
           prefix=v
         #? tags is the core input of this action as everything related to it will reflect the output metadata. 
         #? This one is in the form of a key-value pair list in CSV format to remove limitations intrinsically linked 
@@ -127,10 +126,9 @@ jobs:
       run: buf --version
     
       # --image ${{ steps.yaml-data-name.outputs.data }}:${{ steps.yaml-data-version.outputs.data }}
-    # - name: Push buf.build image
-    #   run: | 
-    #     ls -al
-    #     buf beta registry plugin push --visibility public redact-${{ steps.yaml-data-version.outputs.data }}.tar
+    - name: Push buf.build image
+      run: | 
+        buf beta registry plugin push --visibility public --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
         
     - name: buf.build logout
       run: buf registry logout

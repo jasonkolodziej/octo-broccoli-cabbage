@@ -13,10 +13,10 @@ output_languages:
 registry:
   go:
     min_version: "1.19"
-    deps:
-      - module: github.com/bufbuild/connect-go
-        version: v1.9.0
+    # deps:
+      # - module: # github.com/bufbuild/connect-go
+        # version: v1.9.0
   opts:
     - paths=source_relative
-spdx_license_id: Apache-2.0
+# spdx_license_id: https://github.com/bufbuild/plugins/blob/main/CONTRIBUTING.md
 # license_url: https://github.com/bufbuild/connect-go/blob/v1.9.0/LICENSE
