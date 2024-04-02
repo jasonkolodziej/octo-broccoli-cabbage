@@ -82,8 +82,8 @@ jobs:
         #? tags is the core input of this action as everything related to it will reflect the output metadata. 
         #? This one is in the form of a key-value pair list in CSV format to remove limitations intrinsically linked 
         #? to GitHub Actions (only string format is handled in the input fields).
-          tags: |
-           type=semver,pattern={{major}}.{{minor}}
+        tags: |
+          type=semver,pattern={{major}}.{{minor}}
     #? This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. 
     #? If the build succeeds, it pushes the image to GitHub Packages.
     #? It uses the `context` parameter to define the build's context as the set of files located in the specified path. 
