@@ -128,7 +128,7 @@ jobs:
       # --image ${{ steps.yaml-data-name.outputs.data }}:${{ steps.yaml-data-version.outputs.data }}
     - name: Push buf.build image
       run: | 
-        buf beta registry plugin push --visibility public --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+        buf beta registry plugin push ./cmd/protoc-gen-go-redact --visibility public --debug --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
         
     - name: buf.build logout
       run: buf registry logout
