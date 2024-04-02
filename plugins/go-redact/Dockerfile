@@ -14,7 +14,7 @@
 FROM golang as builder-local
 ENV GOOS=linux GOARCH=amd64 CGO_ENABLED=0
 WORKDIR /app
-COPY ./buf.plugin.yaml ./
+COPY buf.plugin.yaml ./
 COPY ../../go.mod ./
 COPY ../../go.sum ./
 RUN go mod download
