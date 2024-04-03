@@ -1,11 +1,11 @@
 syntax = "proto3";
 
 // Package redact provides interfaces and methods to help implement redaction.
-package redact;
+package redact.v1;
 
 import "google/protobuf/descriptor.proto";
 
-option go_package = "github.com/jasonkolodziej/protoc-gen-go-redact/redact;redact";
+option go_package = "github.com/jasonkolodziej/protoc-gen-go-redact/gen/redact/v1;redact";
 
 // Redaction rules applied at the file level
 extend google.protobuf.FileOptions {

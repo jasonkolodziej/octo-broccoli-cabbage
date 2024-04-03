@@ -1,4 +1,5 @@
-# For help see: https://docs.buf.build/tour/configure-and-build#configure-buf
+#? For help see: https://docs.buf.build/tour/configure-and-build#configure-buf
+#* https://buf.build/docs/configuration/v1/buf-yaml
 version: v1
 name: buf.build/jasonkolodziej/redact
 
@@ -10,7 +11,10 @@ build:
   #? Optional. Lists directories to ignore from .proto file discovery. Any directories added to this list are completely skipped and excluded in the module. 
   #? We don't recommend using this option, but in some situations it's unavoidable.
   excludes: 
-    - example
+    # - example #? used to test example/test/v1/message.proto (as a consumer of redact)
+    - example/asset
+    - example/opt
+    - example/semver
 lint:
   use:
     - DEFAULT

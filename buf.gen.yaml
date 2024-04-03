@@ -1,5 +1,6 @@
 # For help see: https://docs.buf.build/tour/generate-code#configure-a-bufgenyaml
 version: v1
+#? https://buf.build/docs/configuration/v1/buf-gen-yaml#strategy
 managed:
   enabled: true
   go_package_prefix:
@@ -8,6 +9,16 @@ managed:
     except:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
+    #? Overrides the go_package file option value used for specific modules. 
+    #? The override keys must be valid module names. Additionally, the corresponding override values must be a valid 
+    #? Go import path and must not jump context from the current directory. 
+    #? As an example, ../external is invalid. This setting is used for workspace environments, 
+    #? where you have a module that imports from another module in the same workspace, 
+    #? and you need to generate the Go code for each module in different directories. 
+    #? This is particularly relevant for repositories that decouple their private API 
+    #? definitions from their public API definitions.
+    # override:
+    #   buf.build/jasonkolodziej/redact: github.com/jasonkolodziej/protoc-gen-go-redact/gen/redact
 plugins:
   #? Defines a localized protoc plugin for `protoc-gen-go-redact`
   - plugin: go-redact
