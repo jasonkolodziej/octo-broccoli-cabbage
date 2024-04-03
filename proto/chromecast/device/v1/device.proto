@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package chromecast.device.v1; 
+
+import "google/protobuf/empty.proto";
+
+message Device {
+
+}
+
+
+service DeviceController {
+    rpc Play (google.protobuf.Empty) returns (google.protobuf.Empty);
+}

@@ -25,6 +25,7 @@ plugins:
     out: gen
     opt: paths=source_relative
     path: bin/protoc-gen-go-redact
+    
   #? Remote plugins
   - plugin: buf.build/protocolbuffers/go
     out: gen
