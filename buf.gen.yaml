@@ -9,16 +9,15 @@ managed:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
 plugins:
-  - plugin: buf.build/protocolbuffers/go
-    out: gen
-    opt: paths=source_relative
-
+  #? Defines a localized protoc plugin for `protoc-gen-go-redact`
   - plugin: go-redact
     out: gen
     opt: paths=source_relative
     path: bin/protoc-gen-go-redact
-    # path: ["go", "run", "github.com/jasonkolodziej/protoc-gen-go-redact/cmd/protoc-gen-go-redact"]
-
+  #? Remote plugins
+  - plugin: buf.build/protocolbuffers/go
+    out: gen
+    opt: paths=source_relative
   - plugin: buf.build/grpc/go
     out: gen
     opt: paths=source_relative,require_unimplemented_servers=false
