@@ -49,7 +49,9 @@ install:
   	chmod +x "$(shell go env GOPATH)/bin/buf"
 
 update:
-	buf --debug --verbose mod update
+#! Deprecated
+#	buf --debug --verbose mod update
+	buf --debug --verbose dep update
 
 init:
 	buf --debug --verbose mod init

@@ -1,51 +1,161 @@
-# For help see: https://docs.buf.build/tour/generate-code#configure-a-bufgenyaml
-version: v1
-#? https://buf.build/docs/configuration/v1/buf-gen-yaml#strategy
+version: v2
+# 'managed' contains the configuration for managed mode: https://buf.build/docs/generate/managed-mode
+# It has three top-level keys: 'enabled', 'disable', and 'override'.
+#
+# When managed mode is enabled, it uses default values for certain file and field options during code generation.
+# Options, accepted values, and defaults are documented here: https://buf.build/docs/generate/managed-mode#default-behavior
+# The 'disable' key configures modules, paths, fields, and/or options that are excluded from managed mode's behavior.
+# The 'override' key configures field and file option values that override the default values managed mode uses during code generation.
+#
+# In the case of options that combine with other options (e.g. java_package + java_package_prefix
+# + java_package_suffix), they are all applied if possible. If not (e.g. when all three are set)
+# then the last configuration rule wins.
+
+#? after migration -- buf.work.yaml see "Failure: decode buf.work.yaml: v2 is not supported for buf.work.yaml files"
+# directories:
+#   - proto
 managed:
+  # 'enabled: true' turns managed mode on, 'enabled: false' ignores all managed mode options.
   enabled: true
-  go_package_prefix:
-    default: github.com/jasonkolodziej/protoc-gen-go-redact/gen
-    #    default: ./;proto_generated
-    except:
-      - buf.build/googleapis/googleapis
-      - buf.build/grpc-ecosystem/grpc-gateway
-    #? Overrides the go_package file option value used for specific modules. 
-    #? The override keys must be valid module names. Additionally, the corresponding override values must be a valid 
-    #? Go import path and must not jump context from the current directory. 
-    #? As an example, ../external is invalid. This setting is used for workspace environments, 
-    #? where you have a module that imports from another module in the same workspace, 
-    #? and you need to generate the Go code for each module in different directories. 
-    #? This is particularly relevant for repositories that decouple their private API 
-    #? definitions from their public API definitions.
-    # override:
-    #   buf.build/jasonkolodziej/redact: github.com/jasonkolodziej/protoc-gen-go-redact/gen/redact
+  # 'override' is a list of 'override' rules for the list of field and file options that
+  # managed mode handles.
+  override:
+    # Modify the java_package options to "<com>.<proto_package>.<com>" for all files
+    # in buf.build/acme/petapis. These rules take precedence over the rule above.
+    - file_option: go_package_prefix
+      #? <module_name>   : name in go.mod
+      #? <relative_path> : where generated code should be output
+      #* value: # <module_name>/<relative_path>
+      value: github.com/jasonkolodziej/lifx-proto/gen
+
+  #? 'disable' is a list of 'disable' rules managing either file options or field options.
+  #? A 'disable' rule must have at least one key set.
+  disable:
+    # Remove `disable` field if googleapis is not used
+    - module: buf.build/googleapis/googleapis
+      #file_option: go_package_prefix
+      #? Don't modify any files in buf.build/googleapis/googleapis
+      file_option: go_package
+    - module: buf.build/grpc-ecosystem/grpc-gateway
+      file_option: go_package
+#? 'plugins' is a list of plugin configurations used for buf generate.
+#?
+#? A 'plugin' configuration has 8 possible keys:
+#?  - one of (required):
+#?    - 'remote': remote plugin name (e.g. buf.build/protocolbuffers/go)
+#?    - 'protoc_builtin': a 'protoc' built-in plugin (e.g. 'cpp' for 'protoc-gen-cpp')
+#?    - 'local': a string or list of strings that point to a protoc plugin binary on your
+#?     '${PATH}'. If a list of strings is specified, the first is the binary name, and the
+#?      subsequent strings are considered arguments passed to the binary.
+#?  - 'out': <string> path to the file output, which is the same as v1 (required)
+#?  - 'opt': a list of plugin options, which is the same as v1 (optional)
+#?  - 'strategy': a string for the invocation strategy, which is the same as v1 (optional)
+#?  - 'include_imports': <boolean> (optional, precedence given to CLI flag)
+#?  - 'include_wkt': <boolean> (optional, precedence given to CLI flag)
 plugins:
-  #? Defines a localized protoc plugin for `protoc-gen-go-redact`
-  - plugin: go-redact
+  #? Relative paths automatically work
+  #? Absolute paths automatically work
+  #? Binary plugin with arguments and includes
+  # - local: bin/protoc-gen-go-redact
+  #   out: gen
+  #   opt: paths=source_relative
+
+  #! - name: gateway-client
+  # path: protoc-gen-grpc-gateway-client
+  #? Local binary plugin, search in ${PATH} by default
+  #* - local: protoc-gen-grpc-gateway-client
+  - local:
+      [
+        "go",
+        "run",
+        "github.com/akuity/grpc-gateway-client/protoc-gen-grpc-gateway-client",
+      ]
     out: gen
-    opt: paths=source_relative
-    path: bin/protoc-gen-go-redact
-    
-  #? Remote plugins
-  - plugin: buf.build/protocolbuffers/go
+    opt:
+      - paths=source_relative
+
+  - remote: buf.build/grpc-ecosystem/openapiv2
+    out: third_party/OpenAPI
+    # opt:
+    # - paths=source_relative
+  - remote: buf.build/grpc-ecosystem/gateway # :v2.20.0
+    out: gen #  third_party/OpenAPI
+    opt:
+      - paths=source_relative
+  #! Deprecated in v2
+  # - remote: buf.build/grpc-ecosystem/gateway
+  #   out: gen
+  #   opt: paths=source_relative
+  #? Dependencies for: buf.build/grpc-ecosystem/grpc-gateway
+  - remote: buf.build/grpc/go
+    # out: gen
+    # opt: paths=source_relative,require_unimplemented_servers=false
+    #? Alternative to 'opt' for 'buf.build/grpc/go' plugin
+    # - remote: buf.build/connectrpc/go:v1.16.2
     out: gen
-    opt: paths=source_relative
-  - plugin: buf.build/grpc/go
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+    #? Alternative's dependencies
+  - remote: buf.build/protocolbuffers/go
     out: gen
-    opt: paths=source_relative,require_unimplemented_servers=false
-  - plugin: buf.build/grpc-ecosystem/gateway
-    out: gen
-    opt: paths=source_relative
-  # - plugin: buf.build/grpc-ecosystem/openapiv2
-  #   out: third_party/OpenAPI
-#  - remote: buf.build/library/plugins/go:v1.27.1-1
-#    out: proto_generated
-#    opt: paths=source_relative
-#  - remote: buf.build/library/plugins/go-grpc:v1.1.0-2
-#    out: proto_generated
-#    opt: paths=source_relative,require_unimplemented_servers=false
-#  - remote: buf.build/grpc-ecosystem/plugins/grpc-gateway:v2.6.0-1
-#    out: proto_generated
-#    opt: paths=source_relative
-#  - remote: buf.build/grpc-ecosystem/plugins/openapiv2:v2.6.0-1
-#    out: third_party/OpenAPI
+    opt:
+      - paths=source_relative
+#? 'inputs' is a list of inputs that will be run for buf generate. It's a
+#? required key for v2 buf.gen.yaml and allows you to specify options based on the type
+#? of input (https://buf.build//docs/reference/inputs#source) being configured.
+
+# inputs:
+#   # Git repository
+#   - git_repo: github.com/acme/weather
+#     branch: dev
+#     subdir: proto
+#     depth: 30
+#   # BSR module with types and include, and exclude keys specified
+#   - module: buf.build/acme/weather
+#     types:
+#       - "foo.v1.User"
+#       - "foo.v1.UserService"
+#     # If empty, include all paths.
+#     paths:
+#       - a/b/c
+#       - a/b/d
+#     exclude_paths:
+#       - a/b/c/x.proto
+#       - a/b/d/y.proto
+#   # Local module at provided directory path
+#   - directory: x/y/z
+#   # Tarball at provided directory path. Automatically derives compression algorithm from
+#   # the file extension:
+#   # - '.tgz' and '.tar.gz' extensions automatically use Gzip
+#   # - '.tar.zst' automatically uses Zstandard.
+#   - tarball: a/b/x.tar.gz
+#   # Tarball with 'compression', 'strip_components', and 'subdir' keys set explicitly.
+#   # - 'strip_components=<int>' reads at the relative path and strips some number of
+#   #    components—in this example, 2.
+#   # - 'subdir=<string>' reads at the relative path and uses the subdirectory specified
+#   #    within the archive as the base directory—in this case, 'proto'.
+#   - tarball: c/d/x.tar.zst
+#     compression: zstd
+#     strip_components: 2
+#     subdir: proto
+#   # The same applies to 'zip' inputs. A 'zip' input is read at the relative path or http
+#   # location, and can set 'format', 'strip_components', and 'subdir' optionally.
+#   - zip_archive: https://github.com/googleapis/googleapis/archive/master.zip
+#     strip_components: 1
+#     format: zip
+#   # 'proto_file' is a path to a specific proto file. Optionally, you can include package
+#   # files as part of the files to be generated (the default is false).
+#   - proto_file: foo/bar/baz.proto
+#     include_package_files: true
+#   # We also support Buf images as inputs. Images can be any of the following formats:
+#   #  - 'binary_image'
+#   #  - 'json_image'
+#   #  - 'txt_image'
+#   #  - 'yaml_image'
+#   # Each image format also supports compression optionally.
+#   #
+#   # The example below is a binary Buf image with compression set for Gzip.
+#   - binary_image: image.binpb.gz
+#     compression: gz
+
